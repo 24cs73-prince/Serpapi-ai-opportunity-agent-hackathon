@@ -1,0 +1,54 @@
+{
+    "name": "Sample Student",
+    "education": {
+        "degree": "B.Tech Computer Science and Engineering",
+        "university": "Sample University",
+        "year": 3,
+        "expected_graduation": "2027"
+    },
+    "location": "Ahmedabad, Gujarat",
+    "preferred_locations": ["Gujarat", "Remote", "Bangalore"],
+    "experience_years": 0,
+    "experience": [
+        {
+            "title": "Open Source Contributor",
+            "organization": "Various",
+            "duration": "6 months",
+            "description": "Contributed to Python-based ML projects on GitHub"
+        }
+    ],
+    "skills": [
+        "Python",
+        "Machine Learning",
+        "Deep Learning",
+        "Git",
+        "React",
+        "FastAPI",
+        "SQL",
+        "REST APIs",
+        "RAG",
+        "LangChain",
+        "NumPy",
+        "Pandas",
+        "Scikit-learn"
+    ],
+    "projects": [
+        {
+            "name": "AI Chatbot with RAG",
+            "description": "Built a retrieval-augmented generation chatbot using LangChain, FAISS, and Gemini API",
+            "technologies": ["Python", "LangChain", "FAISS", "Gemini API"]
+        },
+        {
+            "name": "Sentiment Analysis Dashboard",
+            "description": "Full-stack web app for analyzing social media sentiment using ML models",
+            "technologies": ["Python", "React", "FastAPI", "Scikit-learn"]
+        }
+    ],
+    "certifications": [
+        "Google AI Essentials",
+        "Deep Learning Specialization — Coursera"
+    ],
+    "preferred_domains": ["AI/ML", "Data Science", "GenAI", "Backend Development"],
+    "opportunity_type": ["Internship", "Entry-level Job"],
+    "remote_preference": "Hybrid"
+}
