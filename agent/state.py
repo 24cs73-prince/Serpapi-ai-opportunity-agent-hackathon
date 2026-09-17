@@ -5,7 +5,7 @@ Defines the state container for the LangGraph / Agent Orchestrator.
 """
 
 from typing import List, Dict, Any, Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel, Field, ConfigDict
 from analysis.opportunity import Opportunity
 from profile.models import UserProfile
 from profile.matcher import MatchResult
@@ -17,8 +17,11 @@ class SearchPlan(BaseModel):
     reasoning: str = ""
 
 class AgentState(BaseModel):
+    model_config = ConfigDict(arbitrary_types_allowed=True)
+
     user_query: str = ""
     target_role: Optional[str] = None
+
     target_location: Optional[str] = None
     profile: Optional[UserProfile] = None
     
