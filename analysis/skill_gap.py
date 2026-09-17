@@ -34,6 +34,22 @@ class SkillGapReport:
     missing_skills: list[SkillGapItem] = field(default_factory=list)
     total_opportunities_analyzed: int = 0
 
+    @property
+    def missing_priority_skills(self) -> list[str]:
+        return [item.skill for item in self.missing_skills if item.priority in ["High", "Medium"]]
+
+    @property
+    def recommendations(self) -> list[str]:
+        return [item.suggestion for item in self.missing_skills if item.suggestion]
+
+
+class SkillGapAnalyzer:
+    """Class wrapper for skill gap analysis."""
+
+    def analyze(self, profile: UserProfile, opportunities: list[Opportunity]) -> SkillGapReport:
+        return analyze_skill_gaps(profile, opportunities)
+
+
 
 def analyze_skill_gaps(
     profile: UserProfile,
