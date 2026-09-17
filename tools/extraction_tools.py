@@ -46,6 +46,43 @@ def extract_opportunities_from_jobs(search_response: SearchResponse) -> list[Opp
     return opportunities
 
 
+def extract_opportunities_from_search(items: list | SearchResponse) -> list[Opportunity]:
+    """
+    High-level extractor for search results.
+    Accepts SearchResponse, list of JobResult objects, or list of dicts/Opportunity objects.
+    """
+    if isinstance(items, SearchResponse):
+        return extract_opportunities_with_llm(items)
+    
+    if isinstance(items, list):
+        if not items:
+            return []
+        if all(isinstance(x, Opportunity) for x in items):
+            return items
+            
+        jobs = []
+        for item in items:
+            if isinstance(item, JobResult):
+                jobs.append(item)
+            elif isinstance(item, dict):
+                jobs.append(JobResult(
+                    title=item.get("title", "Opportunity"),
+                    company=item.get("company", "Company"),
+                    location=item.get("location"),
+                    description=item.get("description"),
+                    apply_link=item.get("apply_link") or item.get("link"),
+                    salary=item.get("salary") or "Not found",
+                    posted_at=item.get("posted_at") or "Not specified",
+                    extensions=item.get("extensions", []),
+                ))
+        
+        response = SearchResponse(success=True, search_type="google_jobs", jobs=jobs)
+        return extract_opportunities_with_llm(response)
+    
+    return []
+
+
+
 def extract_opportunities_with_llm(
     search_response: SearchResponse,
     max_results: int = 10,
