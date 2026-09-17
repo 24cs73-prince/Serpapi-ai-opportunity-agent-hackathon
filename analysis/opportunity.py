@@ -6,8 +6,9 @@ All fields use Optional types — never fabricate unavailable data.
 """
 
 import uuid
-from typing import Optional
-from pydantic import BaseModel, Field
+import hashlib
+from typing import Optional, Any
+from pydantic import BaseModel, Field, model_validator
 
 
 class Opportunity(BaseModel):
@@ -20,7 +21,7 @@ class Opportunity(BaseModel):
     """
 
     # Core identity
-    id: str = Field(default_factory=lambda: str(uuid.uuid4()))
+    id: str = ""
     title: str = ""
     company: Optional[str] = None
     description: Optional[str] = None
@@ -60,6 +61,21 @@ class Opportunity(BaseModel):
     # Internal
     search_confidence: Optional[str] = None  # high / medium / low
     raw_extensions: list[str] = Field(default_factory=list)
+
+    @model_validator(mode="before")
+    @classmethod
+    def set_deterministic_id(cls, data: Any) -> Any:
+        if isinstance(data, dict):
+            if not data.get("id"):
+                title = (data.get("title") or "").strip().lower()
+                company = (data.get("company") or "").strip().lower()
+                url = (data.get("application_url") or data.get("apply_link") or "").strip().lower()
+                raw_key = f"{title}|{company}|{url}"
+                if raw_key == "||":
+                    data["id"] = f"opp_{uuid.uuid4().hex[:12]}"
+                else:
+                    data["id"] = f"opp_{hashlib.md5(raw_key.encode('utf-8')).hexdigest()[:12]}"
+        return data
 
     @property
     def apply_link(self) -> Optional[str]:
