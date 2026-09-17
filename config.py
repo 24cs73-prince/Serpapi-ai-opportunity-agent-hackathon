@@ -59,6 +59,28 @@ class AppConfig:
     match_weight_location: float = 0.10
     match_weight_preferences: float = 0.10
 
+    def has_serpapi_key(self) -> bool:
+        return self.serpapi.is_configured
+
+    def has_llm_key(self) -> bool:
+        return self.llm.is_configured
+
+    @property
+    def SERPAPI_API_KEY(self) -> str:
+        return self.serpapi.api_key
+
+    @property
+    def LLM_PROVIDER(self) -> str:
+        return self.llm.provider
+
+    @property
+    def LLM_API_KEY(self) -> str:
+        return self.llm.api_key
+
+    @property
+    def MODEL_NAME(self) -> str:
+        return self.llm.model_name
+
 
 def load_config() -> AppConfig:
     """Load configuration from environment variables."""
@@ -76,3 +98,7 @@ def load_config() -> AppConfig:
 
 # Singleton config instance
 config = load_config()
+
+def get_config() -> AppConfig:
+    """Helper function to return AppConfig singleton."""
+    return config

@@ -21,30 +21,20 @@ from utils.logger import get_logger
 logger = get_logger(__name__)
 
 
+from dataclasses import dataclass, field
+
+@dataclass
 class MatchResult:
     """Result of matching an opportunity against a user profile."""
-    
-    def __init__(
-        self,
-        score: float,
-        matched_skills: list[str],
-        missing_skills: list[str],
-        skill_score: float,
-        experience_score: float,
-        education_score: float,
-        location_score: float,
-        preference_score: float,
-        explanation: str,
-    ):
-        self.score = score
-        self.matched_skills = matched_skills
-        self.missing_skills = missing_skills
-        self.skill_score = skill_score
-        self.experience_score = experience_score
-        self.education_score = education_score
-        self.location_score = location_score
-        self.preference_score = preference_score
-        self.explanation = explanation
+    score: float
+    matched_skills: list[str] = field(default_factory=list)
+    missing_skills: list[str] = field(default_factory=list)
+    skill_score: float = 0.0
+    experience_score: float = 0.0
+    education_score: float = 0.0
+    location_score: float = 0.0
+    preference_score: float = 0.0
+    explanation: str = ""
 
     @property
     def overall_score(self) -> float:
@@ -54,14 +44,6 @@ class MatchResult:
     def score_percent(self) -> int:
         return int(self.score * 100) if self.score <= 1.0 else int(self.score)
 
-
-class ProfileMatcher:
-    """Class wrapper for profile matching."""
-
-    def calculate_match(self, profile: UserProfile, opportunity: Opportunity, weights: Optional[dict] = None) -> MatchResult:
-        return match_opportunity(profile, opportunity, weights)
-
-
     @property
     def tier(self) -> str:
         if self.score >= 0.75:
@@ -69,6 +51,14 @@ class ProfileMatcher:
         if self.score >= 0.50:
             return "medium"
         return "low"
+
+
+class ProfileMatcher:
+    """Class wrapper for profile matching."""
+
+    def calculate_match(self, profile: UserProfile, opportunity: Opportunity, weights: Optional[dict] = None) -> MatchResult:
+        return match_opportunity(profile, opportunity, weights)
+
 
 
 def match_opportunity(
