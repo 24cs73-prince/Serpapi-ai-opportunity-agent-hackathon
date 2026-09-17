@@ -161,7 +161,7 @@ opportunityiq/
 
 ```bash
 # Clone the repository
-git clone https://github.com/YOUR_USERNAME/opportunityiq.git
+git clone https://github.com/24cs73-prince/Serpapi-ai-opportunity-agent-hackathon.git
 cd opportunityiq
 
 # Create virtual environment
