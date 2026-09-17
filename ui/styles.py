@@ -1,8 +1,9 @@
 """
-OpportunityIQ — Design System
+OpportunityIQ — Modern Luxury Design System
 
-Professional CSS styles and theming for the Streamlit application.
-Color system, typography, and component styles.
+Professional, high-contrast, human-crafted CSS for Streamlit.
+Clean Porcelain Canvas (#F8FAFC), Royal Indigo Accent (#2563EB),
+Deep Slate Sidebar (#0F172A), and crisp typography.
 """
 
 
@@ -11,27 +12,27 @@ def get_custom_css() -> str:
     return """
     <style>
     /* ================================================================
-       OpportunityIQ Design System
-       Professional SaaS aesthetic — Inter font, blue accent, clean layout
+       OpportunityIQ — Luxury Modern Design System
        ================================================================ */
 
-    /* Import Inter font */
-    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap');
 
-    /* ── Global Reset ── */
+    /* ── Global Theme Canvas ── */
     html, body, [class*="st-"] {
-        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-family: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        color: #0F172A;
     }
 
     .stApp {
         background-color: #F8FAFC;
     }
 
-    /* ── Sidebar ── */
+    /* ── Sidebar Styling ── */
     section[data-testid="stSidebar"] {
-        background-color: #0F172A;
-        min-width: 260px !important;
-        max-width: 260px !important;
+        background-color: #0F172A !important;
+        border-right: 1px solid #1E293B;
+        min-width: 270px !important;
+        max-width: 270px !important;
     }
 
     section[data-testid="stSidebar"] .stMarkdown h1,
@@ -41,360 +42,231 @@ def get_custom_css() -> str:
     section[data-testid="stSidebar"] .stMarkdown span,
     section[data-testid="stSidebar"] .stMarkdown li,
     section[data-testid="stSidebar"] .stMarkdown label {
-        color: #E2E8F0 !important;
-    }
-
-    section[data-testid="stSidebar"] .stMarkdown a {
-        color: #93C5FD !important;
-        text-decoration: none;
+        color: #F1F5F9 !important;
     }
 
     section[data-testid="stSidebar"] hr {
-        border-color: #1E293B;
-        margin: 0.75rem 0;
+        border-color: #334155 !important;
+        margin: 1rem 0 !important;
+    }
+
+    /* Sidebar Radio Nav Items */
+    section[data-testid="stSidebar"] .stRadio > div {
+        gap: 4px;
     }
 
     section[data-testid="stSidebar"] .stRadio label {
-        color: #CBD5E1 !important;
-        font-size: 14px;
-        font-weight: 400;
-        padding: 6px 0;
+        color: #94A3B8 !important;
+        font-size: 14px !important;
+        font-weight: 500 !important;
+        padding: 8px 12px !important;
+        border-radius: 8px !important;
+        transition: all 0.2s ease !important;
     }
 
     section[data-testid="stSidebar"] .stRadio label:hover {
         color: #FFFFFF !important;
+        background-color: #1E293B !important;
     }
 
-    /* ── Main Content Area ── */
+    /* Selected Radio Item */
+    section[data-testid="stSidebar"] div[role="radiogroup"] label[aria-checked="true"] {
+        color: #FFFFFF !important;
+        background-color: #2563EB !important;
+        font-weight: 600 !important;
+    }
+
+    /* ── Main Container ── */
     .main .block-container {
-        max-width: 1100px;
+        max-width: 1150px;
         padding-top: 2rem;
-        padding-bottom: 2rem;
+        padding-bottom: 3rem;
     }
 
     /* ── Typography ── */
-    h1 {
+    h1, h2, h3, h4 {
+        font-family: 'Plus Jakarta Sans', sans-serif !important;
         color: #0F172A !important;
-        font-weight: 700 !important;
+    }
+
+    h1 {
         font-size: 32px !important;
-        letter-spacing: -0.5px;
-        margin-bottom: 0.25rem !important;
+        font-weight: 800 !important;
+        letter-spacing: -0.6px !important;
+        margin-bottom: 6px !important;
     }
 
     h2 {
-        color: #0F172A !important;
-        font-weight: 600 !important;
         font-size: 24px !important;
-        letter-spacing: -0.3px;
+        font-weight: 700 !important;
+        letter-spacing: -0.4px !important;
     }
 
     h3 {
-        color: #1E293B !important;
-        font-weight: 600 !important;
         font-size: 18px !important;
+        font-weight: 600 !important;
+        color: #1E293B !important;
     }
 
-    p, li {
+    p, li, label, span {
         color: #334155;
         font-size: 14px;
         line-height: 1.6;
     }
 
-    /* ── Cards ── */
-    .oiq-card {
-        background: #FFFFFF;
-        border: 1px solid #E2E8F0;
-        border-radius: 8px;
-        padding: 20px 24px;
-        margin-bottom: 12px;
-        transition: box-shadow 0.15s ease;
+    /* ── File Uploader (Luxury Fix for Broken Contrast) ── */
+    [data-testid="stFileUploader"] {
+        background-color: #FFFFFF !important;
+        border: 2px dashed #CBD5E1 !important;
+        border-radius: 12px !important;
+        padding: 16px !important;
+        transition: border-color 0.2s ease;
     }
 
-    .oiq-card:hover {
-        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.08);
+    [data-testid="stFileUploader"]:hover {
+        border-color: #2563EB !important;
     }
 
-    .oiq-card-title {
-        font-size: 16px;
-        font-weight: 600;
-        color: #0F172A;
-        margin: 0 0 4px 0;
+    [data-testid="stFileUploader"] section {
+        background-color: transparent !important;
+        color: #0F172A !important;
     }
 
-    .oiq-card-subtitle {
-        font-size: 13px;
-        color: #64748B;
-        margin: 0 0 12px 0;
+    [data-testid="stFileUploader"] section * {
+        color: #334155 !important;
     }
 
-    /* ── Metric Cards ── */
-    .oiq-metric {
-        background: #FFFFFF;
-        border: 1px solid #E2E8F0;
-        border-radius: 8px;
-        padding: 20px;
-        text-align: center;
+    [data-testid="stFileUploader"] button {
+        background-color: #2563EB !important;
+        color: #FFFFFF !important;
+        border: none !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        padding: 6px 16px !important;
+        font-size: 13px !important;
     }
 
-    .oiq-metric-value {
-        font-size: 28px;
-        font-weight: 700;
-        color: #0F172A;
-        margin: 0;
+    [data-testid="stFileUploader"] button:hover {
+        background-color: #1D4ED8 !important;
+        color: #FFFFFF !important;
     }
 
-    .oiq-metric-label {
-        font-size: 12px;
-        font-weight: 500;
-        color: #64748B;
-        text-transform: uppercase;
-        letter-spacing: 0.5px;
-        margin: 4px 0 0 0;
-    }
-
-    /* ── Badges / Tags ── */
-    .oiq-badge {
-        display: inline-block;
-        padding: 3px 10px;
-        border-radius: 4px;
-        font-size: 12px;
-        font-weight: 500;
-        margin: 2px 4px 2px 0;
-    }
-
-    .oiq-badge-blue {
-        background: #EFF6FF;
-        color: #2563EB;
-        border: 1px solid #BFDBFE;
-    }
-
-    .oiq-badge-green {
-        background: #F0FDF4;
-        color: #16A34A;
-        border: 1px solid #BBF7D0;
-    }
-
-    .oiq-badge-orange {
-        background: #FFFBEB;
-        color: #D97706;
-        border: 1px solid #FDE68A;
-    }
-
-    .oiq-badge-red {
-        background: #FEF2F2;
-        color: #DC2626;
-        border: 1px solid #FECACA;
-    }
-
-    .oiq-badge-gray {
-        background: #F8FAFC;
-        color: #64748B;
-        border: 1px solid #E2E8F0;
-    }
-
-    /* ── Match Score ── */
-    .oiq-match-score {
-        display: inline-flex;
-        align-items: center;
-        justify-content: center;
-        width: 52px;
-        height: 52px;
-        border-radius: 50%;
-        font-size: 16px;
-        font-weight: 700;
-    }
-
-    .oiq-match-high {
-        background: #F0FDF4;
-        color: #16A34A;
-        border: 2px solid #86EFAC;
-    }
-
-    .oiq-match-medium {
-        background: #FFFBEB;
-        color: #D97706;
-        border: 2px solid #FDE68A;
-    }
-
-    .oiq-match-low {
-        background: #FEF2F2;
-        color: #DC2626;
-        border: 2px solid #FECACA;
-    }
-
-    /* ── Progress Bar ── */
-    .oiq-progress-bar {
-        background: #E2E8F0;
-        border-radius: 4px;
-        height: 8px;
-        overflow: hidden;
-        margin: 8px 0;
-    }
-
-    .oiq-progress-fill {
-        height: 100%;
-        border-radius: 4px;
-        background: #2563EB;
-        transition: width 0.3s ease;
-    }
-
-    /* ── Status Indicators ── */
-    .oiq-status {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 12px;
-        font-weight: 500;
-    }
-
-    .oiq-status-dot {
-        width: 6px;
-        height: 6px;
-        border-radius: 50%;
-        display: inline-block;
-    }
-
-    .oiq-status-dot-green {
-        background: #16A34A;
-        box-shadow: 0 0 4px rgba(22, 163, 74, 0.4);
-    }
-
-    .oiq-status-dot-orange {
-        background: #D97706;
-    }
-
-    .oiq-status-dot-red {
-        background: #DC2626;
-    }
-
-    /* ── Buttons ── */
+    /* ── Form Buttons ── */
+    div[data-testid="stForm"] .stButton > button,
     .stButton > button {
-        background-color: #2563EB;
-        color: #FFFFFF;
-        border: none;
-        border-radius: 6px;
-        font-weight: 500;
-        font-size: 14px;
-        padding: 8px 20px;
-        transition: background-color 0.15s ease;
+        background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%) !important;
+        color: #FFFFFF !important;
+        border: none !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        font-size: 14px !important;
+        padding: 10px 20px !important;
+        box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25) !important;
+        transition: all 0.2s ease !important;
     }
 
     .stButton > button:hover {
-        background-color: #1D4ED8;
-        color: #FFFFFF;
-        border: none;
+        background: linear-gradient(135deg, #1D4ED8 0%, #1E40AF 100%) !important;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35) !important;
+        transform: translateY(-1px);
     }
 
-    .stButton > button:active {
-        background-color: #1E40AF;
-    }
-
-    /* ── Inputs ── */
-    .stTextInput > div > div > input,
-    .stTextArea > div > div > textarea {
-        border: 1px solid #E2E8F0;
-        border-radius: 6px;
-        font-size: 14px;
-        font-family: 'Inter', sans-serif;
-    }
-
-    .stTextInput > div > div > input:focus,
-    .stTextArea > div > div > textarea:focus {
-        border-color: #2563EB;
-        box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
-    }
-
-    .stSelectbox > div > div {
-        border-radius: 6px;
-    }
-
-    /* ── Divider ── */
-    .oiq-divider {
-        border: none;
-        border-top: 1px solid #E2E8F0;
-        margin: 16px 0;
-    }
-
-    /* ── Empty State ── */
-    .oiq-empty-state {
-        text-align: center;
-        padding: 48px 24px;
-        color: #94A3B8;
-    }
-
-    .oiq-empty-state-icon {
-        font-size: 36px;
-        margin-bottom: 12px;
-    }
-
-    .oiq-empty-state-text {
-        font-size: 14px;
-        color: #94A3B8;
-        margin: 0;
-    }
-
-    /* ── Search Progress ── */
-    .oiq-progress-step {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 8px 0;
-        font-size: 14px;
-        color: #475569;
-    }
-
-    .oiq-progress-step-done {
-        color: #16A34A;
-    }
-
-    .oiq-progress-step-active {
-        color: #2563EB;
-        font-weight: 500;
-    }
-
-    /* ── Source Link ── */
-    .oiq-source-link {
-        font-size: 12px;
-        color: #64748B;
-    }
-
-    .oiq-source-link a {
-        color: #2563EB;
-        text-decoration: none;
-    }
-
-    .oiq-source-link a:hover {
-        text-decoration: underline;
-    }
-
-    /* ── Section Header ── */
-    .oiq-section-header {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 16px;
-    }
-
-    /* ── Streamlit Overrides ── */
-    .stTabs [data-baseweb="tab-list"] {
-        gap: 0;
-        border-bottom: 1px solid #E2E8F0;
-    }
-
-    .stTabs [data-baseweb="tab"] {
-        font-family: 'Inter', sans-serif;
-        font-size: 14px;
-        font-weight: 500;
-        color: #64748B;
-        padding: 8px 16px;
-    }
-
-    .stTabs [aria-selected="true"] {
+    /* Link Buttons */
+    .stLinkButton > a {
+        background-color: #EFF6FF !important;
         color: #2563EB !important;
-        border-bottom-color: #2563EB !important;
+        border: 1px solid #BFDBFE !important;
+        border-radius: 8px !important;
+        font-weight: 600 !important;
+        font-size: 13px !important;
+        padding: 8px 16px !important;
+        text-decoration: none !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        transition: all 0.15s ease !important;
     }
 
-    /* Hide Streamlit branding */
+    .stLinkButton > a:hover {
+        background-color: #2563EB !important;
+        color: #FFFFFF !important;
+        border-color: #2563EB !important;
+    }
+
+    /* ── Form Inputs ── */
+    .stTextInput input, .stTextArea textarea, .stSelectbox select, .stNumberInput input {
+        background-color: #FFFFFF !important;
+        border: 1px solid #CBD5E1 !important;
+        border-radius: 8px !important;
+        color: #0F172A !important;
+        font-size: 14px !important;
+        padding: 10px 14px !important;
+    }
+
+    .stTextInput input:focus, .stTextArea textarea:focus {
+        border-color: #2563EB !important;
+        box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+    }
+
+    /* ── Custom Cards ── */
+    .oiq-card {
+        background-color: #FFFFFF;
+        border: 1px solid #E2E8F0;
+        border-radius: 12px;
+        padding: 20px 24px;
+        margin-bottom: 16px;
+        box-shadow: 0 2px 8px -2px rgba(15, 23, 42, 0.04);
+        transition: all 0.2s ease;
+    }
+
+    .oiq-card:hover {
+        border-color: #CBD5E1;
+        box-shadow: 0 8px 20px -4px rgba(15, 23, 42, 0.08);
+    }
+
+    /* Metric Cards */
+    [data-testid="stMetric"] {
+        background-color: #FFFFFF !important;
+        border: 1px solid #E2E8F0 !important;
+        border-radius: 12px !important;
+        padding: 16px 20px !important;
+        box-shadow: 0 1px 3px rgba(15, 23, 42, 0.04) !important;
+    }
+
+    [data-testid="stMetricLabel"] {
+        font-size: 12px !important;
+        font-weight: 600 !important;
+        color: #64748B !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+    }
+
+    [data-testid="stMetricValue"] {
+        font-size: 26px !important;
+        font-weight: 800 !important;
+        color: #0F172A !important;
+    }
+
+    /* ── Expander & Popover Overrides ── */
+    [data-testid="stExpander"] {
+        background-color: #FFFFFF !important;
+        border: 1px solid #E2E8F0 !important;
+        border-radius: 10px !important;
+    }
+
+    div[data-testid="stPopover"] > button {
+        background-color: #F8FAFC !important;
+        color: #334155 !important;
+        border: 1px solid #CBD5E1 !important;
+        box-shadow: none !important;
+    }
+
+    div[data-testid="stPopover"] > button:hover {
+        background-color: #F1F5F9 !important;
+        color: #0F172A !important;
+    }
+
+    /* ── Hide Streamlit Default Headers ── */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
