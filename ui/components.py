@@ -43,7 +43,6 @@ def render_status_indicator(label: str, status: str = "green") -> str:
 
 
 def render_badge(text: str, variant: str = "blue") -> str:
-
     """Render an inline badge. Variants: blue, green, orange, red, gray."""
     return f'<span style="background-color: #E0F2FE; color: #0369A1; padding: 2px 8px; border-radius: 4px; font-size: 12px; margin-right: 4px;">{text}</span>'
 
@@ -61,6 +60,7 @@ def render_match_score(score: float) -> str:
 
 def render_opportunity_card(opp: Opportunity):
     """Render an opportunity card in Streamlit."""
+    url = opp.application_url or opp.apply_link
     with st.container():
         st.markdown(f"""
         <div style="background-color: white; border: 1px solid #E2E8F0; border-radius: 8px; padding: 16px; margin-bottom: 16px;">
@@ -68,7 +68,7 @@ def render_opportunity_card(opp: Opportunity):
                 <h4 style="margin: 0; color: #0F172A;">{opp.title}</h4>
                 {render_match_score(opp.match_score) if opp.match_score else ''}
             </div>
-            <p style="color: #2563EB; font-weight: 500; margin: 4px 0;">{opp.company} &nbsp;•&nbsp; <span style="color: #64748B;">{opp.location or 'India'}</span></p>
+            <p style="color: #2563EB; font-weight: 500; margin: 4px 0;">{opp.company or 'Company'} &nbsp;•&nbsp; <span style="color: #64748B;">{opp.location or 'India'}</span></p>
             <p style="font-size: 13px; color: #334155; margin: 8px 0;">{(opp.description or '')[:140]}...</p>
             <p style="margin-top: 8px;">{render_skill_badges(opp.required_skills[:4])}</p>
         </div>
@@ -76,8 +76,8 @@ def render_opportunity_card(opp: Opportunity):
 
         col_apply, col_save, col_details = st.columns([2, 2, 3])
         with col_apply:
-            if opp.apply_link:
-                st.link_button("Apply ↗", opp.apply_link, use_container_width=True)
+            if url:
+                st.link_button("Apply ↗", url, use_container_width=True)
             else:
                 st.button("Apply ↗", key=f"apply_{opp.id}", disabled=True, use_container_width=True)
         with col_save:
@@ -99,8 +99,9 @@ def render_opportunity_card(opp: Opportunity):
 
 def render_opportunity_detail_modal(opp: Opportunity):
     """Render details popover for an opportunity."""
+    url = opp.application_url or opp.apply_link
     st.subheader(opp.title)
-    st.markdown(f"**Company:** {opp.company}")
+    st.markdown(f"**Company:** {opp.company or 'Not specified'}")
     st.markdown(f"**Location:** {opp.location or 'Not specified'}")
     st.markdown(f"**Experience:** {opp.experience_required or 'Not specified'}")
     if opp.salary_or_stipend:
@@ -119,8 +120,8 @@ def render_opportunity_detail_modal(opp: Opportunity):
     st.markdown("#### Description")
     st.write(opp.description or "No detailed description provided.")
 
-    if opp.apply_link:
-        st.link_button("Apply Directly on Source", opp.apply_link)
+    if url:
+        st.link_button("Apply Directly on Source", url)
 
 
 def render_empty_state(title: str, description: str):
