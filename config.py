@@ -91,9 +91,11 @@ def load_config() -> AppConfig:
         llm=LLMConfig(
             provider=os.getenv("LLM_PROVIDER", "gemini"),
             api_key=os.getenv("LLM_API_KEY", ""),
-            model_name=os.getenv("MODEL_NAME", "gemini-2.0-flash"),
+            model_name=os.getenv("MODEL_NAME", "gemini-1.5-flash-latest"),
         ),
     )
+
+
 
 
 # Singleton config instance

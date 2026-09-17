@@ -95,6 +95,17 @@ class SearchResponse:
     total_results: int = 0
     search_metadata: dict = field(default_factory=dict)
 
+    @property
+    def results(self) -> list[Any]:
+        """Return all retrieved items (jobs, web results, or news results)."""
+        if self.jobs:
+            return self.jobs
+        if self.web_results:
+            return self.web_results
+        if self.news_results:
+            return self.news_results
+        return []
+
 
 # ── Module-level client ──
 _client: Optional[SerpApiClient] = None
@@ -115,19 +126,11 @@ def search_jobs(
 ) -> SearchResponse:
     """
     Search for job/internship opportunities via Google Jobs.
-    
-    Args:
-        query: Natural language search query.
-        location: Location filter (e.g., "Gujarat, India").
-        date_posted: Recency filter — "today", "3days", "week", "month".
-    
-    Returns:
-        SearchResponse with normalized JobResult items.
+    Includes automatic controlled fallback to Google Search if jobs API times out.
     """
     client = _get_client()
     response = SearchResponse(query=query, search_type="google_jobs")
 
-    # Build chips for date filter
     chips = None
     if date_posted:
         chips_map = {
@@ -143,7 +146,6 @@ def search_jobs(
         response.search_metadata = raw.get("search_metadata", {})
 
         for job in raw.get("jobs_results", []):
-            # Extract apply links
             apply_options = job.get("apply_options", [])
             apply_link = apply_options[0].get("link", "") if apply_options else ""
 
@@ -166,7 +168,17 @@ def search_jobs(
     except SerpApiError as e:
         response.success = False
         response.error = str(e)
-        logger.error(f"search_jobs failed: {e}")
+        logger.warning(f"search_jobs issue for '{query}': {e}. Triggering controlled Google Search fallback...")
+
+        # Controlled Fallback to Google Search
+        try:
+            web_resp = search_web(query=query, location=location, num=5)
+            if web_resp.web_results:
+                response.web_results = web_resp.web_results
+                response.total_results = len(web_resp.web_results)
+                logger.info(f"Fallback Google Search returned {response.total_results} results.")
+        except Exception as fallback_err:
+            logger.error(f"Fallback search failed: {fallback_err}")
 
     return response
 
@@ -176,17 +188,7 @@ def search_web(
     location: Optional[str] = None,
     num: int = 10,
 ) -> SearchResponse:
-    """
-    Search Google for supplementary web results.
-    
-    Args:
-        query: Search query.
-        location: Location for localized results.
-        num: Number of results.
-    
-    Returns:
-        SearchResponse with normalized WebResult items.
-    """
+    """Search Google web results via SerpApi."""
     client = _get_client()
     response = SearchResponse(query=query, search_type="google")
 
@@ -219,16 +221,7 @@ def search_news(
     query: str,
     location: Optional[str] = None,
 ) -> SearchResponse:
-    """
-    Search Google News for recent opportunity-related news.
-    
-    Args:
-        query: News search query.
-        location: Location for localized results.
-    
-    Returns:
-        SearchResponse with normalized NewsResult items.
-    """
+    """Search Google News via SerpApi."""
     client = _get_client()
     response = SearchResponse(query=query, search_type="google_news")
 

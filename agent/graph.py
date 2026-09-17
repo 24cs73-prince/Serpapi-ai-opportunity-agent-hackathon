@@ -48,13 +48,23 @@ class AgentWorkflow:
         state.current_step = "searching"
         log("🔍 Executing live SerpApi search queries...")
         raw_items = []
+        executed_queries = set()
+
         for q in state.search_plan.queries:
+            q_norm = " ".join(q.lower().split())
+            if q_norm in executed_queries:
+                continue
+            executed_queries.add(q_norm)
+
             if "jobs" in state.search_plan.search_types:
-                job_res = search_jobs(query=q, location=state.target_location or "India")
-                raw_items.extend(job_res.results)
+                job_res = search_jobs(query=q, location=state.target_location)
+                if job_res.results:
+                    raw_items.extend(job_res.results)
+
             if "web" in state.search_plan.search_types and len(raw_items) < 5:
-                web_res = search_web(query=q)
-                raw_items.extend(web_res.results)
+                web_res = search_web(query=q, location=state.target_location)
+                if web_res.results:
+                    raw_items.extend(web_res.results)
 
         state.raw_results = raw_items
         log(f"Search complete: {len(raw_items)} raw results retrieved from SerpApi.")
@@ -86,7 +96,7 @@ class AgentWorkflow:
         log("📊 Generating executive career intelligence summary...")
         top_count = len(state.structured_opportunities)
         state.final_summary = f"Identified **{top_count} verified opportunities** matching your request for '{state.user_query}'."
-        
+
         state.current_step = "completed"
         log("✅ OpportunityIQ Agent workflow completed successfully!")
 
