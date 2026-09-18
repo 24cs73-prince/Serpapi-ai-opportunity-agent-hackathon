@@ -108,18 +108,18 @@ def get_custom_css() -> str:
         color: #1E293B !important;
     }
 
-    p, li, label, span {
+    p, li, label, .stMarkdown p {
         color: #334155;
         font-size: 14px;
         line-height: 1.6;
     }
 
-    /* ── File Uploader (Luxury Fix for Broken Contrast) ── */
+    /* ── File Uploader Styling (Fix for uploadUpload text duplication) ── */
     [data-testid="stFileUploader"] {
         background-color: #FFFFFF !important;
         border: 2px dashed #CBD5E1 !important;
         border-radius: 12px !important;
-        padding: 16px !important;
+        padding: 20px !important;
         transition: border-color 0.2s ease;
     }
 
@@ -127,13 +127,11 @@ def get_custom_css() -> str:
         border-color: #2563EB !important;
     }
 
-    [data-testid="stFileUploader"] section {
-        background-color: transparent !important;
-        color: #0F172A !important;
-    }
-
-    [data-testid="stFileUploader"] section * {
-        color: #334155 !important;
+    [data-testid="stFileUploader"] [data-testid="stFileUploaderDropzone"] {
+        background-color: #F8FAFC !important;
+        border-radius: 10px !important;
+        border: none !important;
+        padding: 16px !important;
     }
 
     [data-testid="stFileUploader"] button {
@@ -142,18 +140,29 @@ def get_custom_css() -> str:
         border: none !important;
         border-radius: 8px !important;
         font-weight: 600 !important;
-        padding: 6px 16px !important;
         font-size: 13px !important;
+        padding: 8px 18px !important;
+        box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2) !important;
     }
 
-    [data-testid="stFileUploader"] button:hover {
-        background-color: #1D4ED8 !important;
+    [data-testid="stFileUploader"] button * {
         color: #FFFFFF !important;
     }
 
-    /* ── Form Buttons ── */
-    div[data-testid="stForm"] .stButton > button,
-    .stButton > button {
+    /* Hide internal icon span text to prevent duplicate "uploadUpload" */
+    [data-testid="stFileUploader"] button span[aria-hidden="true"],
+    [data-testid="stFileUploader"] button span[data-testid="stIconMaterial"] {
+        display: none !important;
+    }
+
+    [data-testid="stFileUploader"] small,
+    [data-testid="stFileUploader"] p {
+        color: #475569 !important;
+    }
+
+    /* ── Form Buttons & Action Buttons (High Contrast White Text) ── */
+    div.stButton > button,
+    div[data-testid="stForm"] div.stButton > button {
         background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%) !important;
         color: #FFFFFF !important;
         border: none !important;
@@ -165,10 +174,30 @@ def get_custom_css() -> str:
         transition: all 0.2s ease !important;
     }
 
-    .stButton > button:hover {
+    /* Force all text elements inside main buttons to be solid white */
+    div.stButton > button *,
+    div[data-testid="stForm"] div.stButton > button * {
+        color: #FFFFFF !important;
+    }
+
+    div.stButton > button:hover {
         background: linear-gradient(135deg, #1D4ED8 0%, #1E40AF 100%) !important;
         box-shadow: 0 4px 12px rgba(37, 99, 235, 0.35) !important;
         transform: translateY(-1px);
+    }
+
+    /* Exclude utility buttons inside NumberInputs & Selectboxes from main button styles */
+    div[data-testid="stNumberInputContainer"] button,
+    div[data-testid="stNumberInputContainer"] button * {
+        background: #F8FAFC !important;
+        color: #334155 !important;
+        box-shadow: none !important;
+        transform: none !important;
+    }
+
+    div[data-testid="stNumberInputContainer"] button:hover {
+        background: #F1F5F9 !important;
+        color: #0F172A !important;
     }
 
     /* Link Buttons */
@@ -193,8 +222,8 @@ def get_custom_css() -> str:
         border-color: #2563EB !important;
     }
 
-    /* ── Form Inputs ── */
-    .stTextInput input, .stTextArea textarea, .stSelectbox select, .stNumberInput input {
+    /* ── Form Inputs & Widgets ── */
+    .stTextInput input, .stTextArea textarea {
         background-color: #FFFFFF !important;
         border: 1px solid #CBD5E1 !important;
         border-radius: 8px !important;
@@ -206,6 +235,47 @@ def get_custom_css() -> str:
     .stTextInput input:focus, .stTextArea textarea:focus {
         border-color: #2563EB !important;
         box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12) !important;
+    }
+
+    /* Selectbox, NumberInput & BaseWeb Containers Fix */
+    div[data-baseweb="select"] > div,
+    div[data-baseweb="input"] > div,
+    div[data-testid="stNumberInputContainer"] {
+        background-color: #FFFFFF !important;
+        border: 1px solid #CBD5E1 !important;
+        border-radius: 8px !important;
+        color: #0F172A !important;
+    }
+
+    div[data-baseweb="select"] span,
+    div[data-baseweb="select"] div,
+    div[data-baseweb="input"] input,
+    div[data-testid="stNumberInputContainer"] input {
+        color: #0F172A !important;
+        background-color: transparent !important;
+    }
+
+    div[data-testid="stNumberInputContainer"] button svg {
+        fill: #334155 !important;
+    }
+
+    /* Dropdown Option List Popovers */
+    div[data-baseweb="popover"] ul,
+    div[role="listbox"] {
+        background-color: #FFFFFF !important;
+        border: 1px solid #E2E8F0 !important;
+        border-radius: 8px !important;
+        box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.1) !important;
+    }
+
+    div[role="option"] {
+        color: #0F172A !important;
+        background-color: #FFFFFF !important;
+    }
+
+    div[role="option"]:hover, div[role="option"][aria-selected="true"] {
+        background-color: #EFF6FF !important;
+        color: #2563EB !important;
     }
 
     /* ── Custom Cards ── */
@@ -247,11 +317,30 @@ def get_custom_css() -> str:
         color: #0F172A !important;
     }
 
-    /* ── Expander & Popover Overrides ── */
+    /* ── Expander Overrides & Icon Fix ── */
     [data-testid="stExpander"] {
         background-color: #FFFFFF !important;
         border: 1px solid #E2E8F0 !important;
         border-radius: 10px !important;
+    }
+
+    [data-testid="stExpander"] details {
+        background-color: #FFFFFF !important;
+        border-radius: 10px !important;
+    }
+
+    [data-testid="stExpander"] summary {
+        color: #0F172A !important;
+        font-weight: 600 !important;
+        font-size: 15px !important;
+    }
+
+    [data-testid="stExpander"] summary:hover {
+        color: #2563EB !important;
+    }
+
+    [data-testid="stExpander"] summary svg {
+        fill: #475569 !important;
     }
 
     div[data-testid="stPopover"] > button {
@@ -266,10 +355,13 @@ def get_custom_css() -> str:
         color: #0F172A !important;
     }
 
-    /* ── Hide Streamlit Default Headers ── */
+    /* ── Streamlit Header Cleanup ── */
+    header[data-testid="stHeader"] {
+        background: transparent !important;
+    }
+
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
-    header {visibility: hidden;}
 
     </style>
     """
