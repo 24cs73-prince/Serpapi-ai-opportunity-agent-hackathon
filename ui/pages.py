@@ -14,6 +14,8 @@ Renders all pages of the Streamlit application:
 import streamlit as st
 import time
 import json
+import html
+import textwrap
 from typing import Optional, List
 
 from ui.components import (
@@ -303,14 +305,18 @@ def render_history():
 
     if history:
         for item in reversed(history):
-            st.markdown(f"""
-            <div style="background-color: #F8FAFC; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px 16px; margin-bottom: 8px;">
-                <strong>Query:</strong> {item.get('query')} &nbsp;|&nbsp; 
-                <strong>Location:</strong> {item.get('location')} &nbsp;|&nbsp; 
-                <strong>Results:</strong> {item.get('count')} &nbsp;|&nbsp; 
-                <span style="color: #64748B;">{item.get('timestamp')}</span>
+            query = html.escape(str(item.get('query', '')))
+            loc = html.escape(str(item.get('location', '')))
+            count = item.get('count', 0)
+            timestamp = html.escape(str(item.get('timestamp', '')))
+            st.markdown(textwrap.dedent(f"""
+            <div style="background-color: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 8px; padding: 12px 16px; margin-bottom: 8px;">
+                <strong>Query:</strong> {query} &nbsp;|&nbsp; 
+                <strong>Location:</strong> {loc} &nbsp;|&nbsp; 
+                <strong>Results:</strong> {count} &nbsp;|&nbsp; 
+                <span style="color: #64748B;">{timestamp}</span>
             </div>
-            """, unsafe_allow_html=True)
+            """).strip(), unsafe_allow_html=True)
     else:
         render_empty_state("No Search History", "Your SerpApi searches will be logged here.")
 

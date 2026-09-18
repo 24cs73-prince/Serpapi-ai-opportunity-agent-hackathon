@@ -5,6 +5,8 @@ Streamlit-compatible HTML/component builders for cards, badges,
 metrics, progress indicators, headers, and modal overlays.
 """
 
+import html
+import textwrap
 import streamlit as st
 from typing import Optional, List
 from analysis.opportunity import Opportunity
@@ -33,17 +35,18 @@ def render_status_indicator(label: str, status: str = "green") -> str:
     """Render a status indicator with dot. Status: green, orange, red."""
     color_map = {"green": "#16A34A", "orange": "#D97706", "red": "#DC2626"}
     dot_color = color_map.get(status, "#16A34A")
-    return f"""
+    return textwrap.dedent(f"""
     <div style="display: flex; align-items: center; gap: 8px; font-size: 12px; color: #CBD5E1; margin-bottom: 6px;">
         <span style="height: 8px; width: 8px; background-color: {dot_color}; border-radius: 50%; display: inline-block;"></span>
-        <span>{label}</span>
+        <span>{html.escape(label)}</span>
     </div>
-    """
+    """).strip()
 
 
 def render_badge(text: str, variant: str = "blue") -> str:
     """Render an inline badge. Variants: blue, green, orange, red, gray."""
-    return f'<span style="background-color: #EFF6FF; color: #1E40AF; border: 1px solid #DBEAFE; padding: 3px 10px; border-radius: 6px; font-size: 12px; font-weight: 500; margin-right: 6px; display: inline-block; margin-bottom: 4px;">{text}</span>'
+    escaped_text = html.escape(text)
+    return f'<span style="background-color: #EFF6FF; color: #1E40AF; border: 1px solid #DBEAFE; padding: 3px 10px; border-radius: 6px; font-size: 12px; font-weight: 500; margin-right: 6px; display: inline-block; margin-bottom: 4px;">{escaped_text}</span>'
 
 
 def render_skill_badges(skills: List[str], variant: str = "blue") -> str:
@@ -60,21 +63,31 @@ def render_match_score(score: float) -> str:
 
 
 def render_opportunity_card(opp: Opportunity):
-    """Render an opportunity card in Streamlit."""
+    """Render an opportunity card in Streamlit with clean un-indented HTML."""
     url = opp.application_url or opp.apply_link
-    with st.container():
-        st.markdown(f"""
-        <div style="background-color: white; border: 1px solid #E2E8F0; border-radius: 12px; padding: 20px; margin-bottom: 12px; box-shadow: 0 2px 8px -2px rgba(15, 23, 42, 0.05);">
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
-                <h4 style="margin: 0; font-size: 17px; font-weight: 700; color: #0F172A;">{opp.title}</h4>
-                {render_match_score(opp.match_score) if opp.match_score else ''}
-            </div>
-            <p style="color: #2563EB; font-weight: 600; font-size: 14px; margin: 4px 0 8px 0;">{opp.company or 'Company'} &nbsp;•&nbsp; <span style="color: #64748B; font-weight: 400;">{opp.location or 'India'}</span></p>
-            <p style="font-size: 13px; color: #475569; margin: 8px 0; line-height: 1.5;">{(opp.description or '')[:140]}...</p>
-            <div style="margin-top: 10px;">{render_skill_badges(opp.required_skills[:4])}</div>
-        </div>
-        """, unsafe_allow_html=True)
+    title = html.escape(opp.title or "Opportunity")
+    company = html.escape(opp.company or "Company")
+    location = html.escape(opp.location or "India")
+    raw_desc = (opp.description or "")[:140]
+    description = html.escape(raw_desc)
 
+    match_html = render_match_score(opp.match_score) if opp.match_score else ""
+    badges_html = render_skill_badges(opp.required_skills[:4])
+
+    card_html = textwrap.dedent(f"""
+    <div style="background-color: #FFFFFF; border: 1px solid #E2E8F0; border-radius: 12px; padding: 20px; margin-bottom: 12px; box-shadow: 0 2px 8px -2px rgba(15, 23, 42, 0.05);">
+        <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 8px;">
+            <h4 style="margin: 0; font-size: 16px; font-weight: 700; color: #0F172A; line-height: 1.4; word-break: break-word;">{title}</h4>
+            {match_html}
+        </div>
+        <p style="color: #2563EB; font-weight: 600; font-size: 14px; margin: 4px 0 8px 0;">{company} &nbsp;•&nbsp; <span style="color: #64748B; font-weight: 400;">{location}</span></p>
+        <p style="font-size: 13px; color: #475569; margin: 8px 0; line-height: 1.5; word-break: break-word;">{description}...</p>
+        <div style="margin-top: 10px;">{badges_html}</div>
+    </div>
+    """).strip()
+
+    with st.container():
+        st.markdown(card_html, unsafe_allow_html=True)
         col_apply, col_save, col_details = st.columns([2, 2, 3])
         with col_apply:
             if url:
@@ -136,9 +149,10 @@ def render_opportunity_detail_modal(opp: Opportunity):
 
 def render_empty_state(title: str, description: str):
     """Render empty state card."""
-    st.markdown(f"""
+    html_content = textwrap.dedent(f"""
     <div style="text-align: center; padding: 48px 24px; background-color: #FFFFFF; border: 2px dashed #E2E8F0; border-radius: 12px; margin: 16px 0;">
-        <h4 style="color: #475569; font-weight: 700; font-size: 16px; margin-bottom: 6px;">{title}</h4>
-        <p style="color: #94A3B8; font-size: 14px; margin: 0;">{description}</p>
+        <h4 style="color: #475569; font-weight: 700; font-size: 16px; margin-bottom: 6px;">{html.escape(title)}</h4>
+        <p style="color: #94A3B8; font-size: 14px; margin: 0;">{html.escape(description)}</p>
     </div>
-    """, unsafe_allow_html=True)
+    """).strip()
+    st.markdown(html_content, unsafe_allow_html=True)
