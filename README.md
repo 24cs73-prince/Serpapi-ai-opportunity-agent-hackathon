@@ -22,4 +22,8 @@ Instead of simply returning search results, OpportunityIQ helps users understand
 Traditional job search usually works like:
 
 ```text
+<<<<<<< HEAD
 Search → Open many tabs → Read descriptions → Compare manually
+=======
+Search → Open many tabs → Read descriptions → Compare manually
+>>>>>>> 4ebefa7 (docs(presentation): add 10-slide professional hackathon pitch deck)
